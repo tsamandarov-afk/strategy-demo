@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Демо-счета стратегий</title>
+<meta name="description" content="Два демо-счёта в реальном времени: DAX London и USDJPY 15m.">
+<style>
+:root{--bg:#f9f9f7;--card:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--mut:#898781;--line:#e1e0d9;--base:#c3c2b7;
+--s1:#2a78d6;--s2:#eb6834;--pos:#006300;--neg:#d03b3b;--ring:rgba(11,11,11,.10)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d0d;--card:#1a1a19;--ink:#fff;--ink2:#c3c2b7;
+--mut:#898781;--line:#2c2c2a;--base:#383835;--s1:#3987e5;--s2:#d95926;--pos:#0ca30c;--neg:#e66767;--ring:rgba(255,255,255,.10)}}
+:root[data-theme="dark"]{--bg:#0d0d0d;--card:#1a1a19;--ink:#fff;--ink2:#c3c2b7;--mut:#898781;--line:#2c2c2a;--base:#383835;
+--s1:#3987e5;--s2:#d95926;--pos:#0ca30c;--neg:#e66767;--ring:rgba(255,255,255,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif}
+main{max-width:1080px;margin:0 auto;padding:28px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+h1{font-size:24px;margin:0;letter-spacing:-.01em}
+.sub{color:var(--mut);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--ring);border-radius:12px;padding:18px 18px 14px;min-width:0}
+.card h2{font-size:17px;margin:0 0 2px;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.desc{color:var(--ink2);font-size:13px;margin:0 0 14px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.kpi .v{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--mut);font-size:12px}
+.pos{color:var(--pos)}.neg{color:var(--neg)}
+svg{display:block;width:100%;height:auto}
+.chart{position:relative}
+.tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--ring);border-radius:8px;padding:6px 8px;
+font-size:12px;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.08);display:none;white-space:nowrap}
+h3{font-size:13px;color:var(--mut);font-weight:500;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{color:var(--mut);font-weight:500}
+th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}
+.empty{color:var(--mut);font-size:13px;padding:8px 0}
+.exp{color:var(--mut);font-size:12px;margin-top:10px}
+footer{color:var(--mut);font-size:12px;margin-top:24px}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Демо-счета стратегий</h1>
+  <div class="sub" id="upd"></div>
+</header>
+<div class="grid" id="cards"></div>
+<footer>Виртуальные счета по $10 000, риск 1% от начального баланса на сделку. Котировки Dukascopy (1m), сделки считаются по правилам стратегии без ручного вмешательства. Не является инвестиционной рекомендацией.</footer>
+</main>
+<script>
+const DATA = {"strategies": [{"name": "DAX London (Rize Trades)", "desc": "GER40, 1m. 09:00–11:00 МСК (02:00–04:00 Нью-Йорк): FVG 5/15m → откат → смена направления на 1m; стоп за откат, цель 2R, безубыток на 1R, до 2 сделок в день.", "expect": "Бэктест 2024–2026: ~23 сделки в месяц; 2024 −35R, 2025 +50R, 2026 +26R; просадки до −19R.", "start": "28.09.2026", "stats": {"balance": 10191.854291129515, "ret": 1.9185429112951624, "closed": 2, "win": 50}, "trades": [{"t_in": "2026-09-28T06:44:00+00:00", "sym": "DAX", "dir": -1, "entry": 25417.7, "sl": 25429.2, "tp": 25393.1, "why": "be", "status": "closed", "R": -0.1, "pnl": -10.0}, {"t_in": "2026-09-28T06:48:00+00:00", "sym": "DAX", "dir": 1, "entry": 25418.7, "sl": 25402.7, "tp": 25452.2, "why": "tp", "status": "closed", "R": 2.02, "pnl": 202.0}], "curve": [{"t": "2026-09-28T00:00:00+00:00", "b": 10000.0}, {"t": "2026-09-28T06:46:00+00:00", "b": 9989.57, "lab": "DAX -0.10R"}, {"t": "2026-09-28T06:59:00+00:00", "b": 10191.85, "lab": "DAX +2.02R"}]}, {"name": "USDJPY 15m (TradeSmart) — корзина", "desc": "USDJPY, EURJPY, AUDJPY, XAUUSD, 15m, только покупки: ADX(100/40) < 20, CCI(250) > 125, TDFI(10) зелёный; стоп 6 ATR(80), цель 15.5 ATR.", "expect": "Бэктест 2019–2026: ~18 сделок в месяц, винрейт ~35%, +0.22R на сделку, все годы в плюсе; просадки до −32R.", "start": "28.09.2026", "stats": {"balance": 10000.0, "ret": 0.0, "closed": 0, "win": 0}, "trades": [], "curve": [{"t": "2026-09-28T00:00:00+00:00", "b": 10000.0}]}], "updated": "2026-09-28T08:24:28.479536+00:00"};
+const fmt = (x, d=0) => (x>0?'+':'') + x.toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});
+const cls = x => x>0.005?'pos':x<-0.005?'neg':'';
+const tMsk = s => new Date(s).toLocaleString('ru-RU',{timeZone:'Europe/Moscow',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function chart(el, pts, color){
+  const W=640,H=180,P={l:44,r:10,t:10,b:22};
+  const xs=pts.map(p=>+new Date(p.t)), ys=pts.map(p=>p.b);
+  const x0=Math.min(...xs), x1=Math.max(...xs, x0+864e5), y0=Math.min(...ys, 10000)*0.995, y1=Math.max(...ys, 10000)*1.005;
+  const X=v=>P.l+(v-x0)/(x1-x0)*(W-P.l-P.r), Y=v=>H-P.b-(v-y0)/(y1-y0)*(H-P.t-P.b);
+  let g=''; for(let k=0;k<=3;k++){const v=y0+(y1-y0)*k/3; g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${P.l-6}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${Math.round(v).toLocaleString('ru-RU')}</text>`;}
+  const base=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(10000)}" y2="${Y(10000)}" stroke="var(--base)" stroke-width="1" stroke-dasharray="3 3"/>`;
+  const path=pts.map((p,i)=>(i?'L':'M')+X(xs[i]).toFixed(1)+' '+Y(p.b).toFixed(1)).join(' ');
+  const d0=new Date(x0).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'}), d1=new Date(x1).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'});
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Кривая баланса">${g}${base}<path d="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>`+
+    `<circle id="hp" r="4" fill="${color}" stroke="var(--card)" stroke-width="2" style="display:none"/>`+
+    `<text x="${P.l}" y="${H-6}" font-size="11" fill="var(--mut)">${d0}</text><text x="${W-P.r}" y="${H-6}" font-size="11" fill="var(--mut)" text-anchor="end">${d1}</text></svg><div class="tip"></div>`;
+  const svg=el.querySelector('svg'), tip=el.querySelector('.tip'), hp=el.querySelector('#hp');
+  svg.addEventListener('mousemove',e=>{const r=svg.getBoundingClientRect(); const vx=(e.clientX-r.left)/r.width*W;
+    let i=0,b=1e18; xs.forEach((x,k)=>{const d=Math.abs(X(x)-vx); if(d<b){b=d;i=k}});
+    hp.setAttribute('cx',X(xs[i])); hp.setAttribute('cy',Y(pts[i].b)); hp.style.display='';
+    tip.style.display='block'; tip.innerHTML=`${tMsk(pts[i].t)} · <b>$${Math.round(pts[i].b).toLocaleString('ru-RU')}</b>${pts[i].lab?'<br>'+esc(pts[i].lab):''}`;
+    const px=X(xs[i])/W*r.width; tip.style.left=Math.min(px+10, r.width-170)+'px'; tip.style.top='8px';});
+  svg.addEventListener('mouseleave',()=>{tip.style.display='none'; hp.style.display='none'});
+}
+function card(s, color){
+  const c=document.createElement('section'); c.className='card';
+  const st=s.stats, open=s.trades.filter(t=>t.status==='open'), closed=s.trades.filter(t=>t.status!=='open').slice().reverse();
+  const row=t=>`<tr><td>${tMsk(t.t_in)}</td><td>${esc(t.sym)} ${t.dir>0?'buy':'sell'}</td><td>${t.entry}</td><td>${t.sl}</td><td>${t.tp}</td>`+
+    `<td>${t.status==='open'?'—':({tp:'тейк',sl:'стоп',be:'безубыток',time:'время',end:'—'}[t.why]||t.why)}</td><td class="${cls(t.R)}">${fmt(t.R,2)}R</td><td class="${cls(t.pnl)}">${fmt(t.pnl)}</td></tr>`;
+  const head='<tr><th>Вход (МСК)</th><th>Сделка</th><th>Цена</th><th>Стоп</th><th>Цель</th><th>Выход</th><th>R</th><th>$</th></tr>';
+  c.innerHTML=`<h2><span class="dot" style="background:${color}"></span>${esc(s.name)}</h2><p class="desc">${esc(s.desc)}</p>
+   <div class="kpis">
+    <div class="kpi"><div class="v">$${Math.round(st.balance).toLocaleString('ru-RU')}</div><div class="l">баланс</div></div>
+    <div class="kpi"><div class="v ${cls(st.ret)}">${fmt(st.ret,1)}%</div><div class="l">с ${esc(s.start)}</div></div>
+    <div class="kpi"><div class="v">${st.closed}</div><div class="l">сделок закрыто</div></div>
+    <div class="kpi"><div class="v">${st.closed?st.win+'%':'—'}</div><div class="l">винрейт</div></div>
+   </div>
+   <div class="chart"></div>
+   <h3>Открытые позиции</h3>${open.length?`<div class="wrap"><table>${head}${open.map(row).join('')}</table></div>`:'<div class="empty">Нет открытых позиций</div>'}
+   <h3>Закрытые сделки</h3>${closed.length?`<div class="wrap"><table>${head}${closed.slice(0,30).map(row).join('')}</table></div>`:'<div class="empty">Пока нет закрытых сделок</div>'}
+   <div class="exp">${esc(s.expect)}</div>`;
+  chart(c.querySelector('.chart'), s.curve, color);
+  return c;
+}
+document.getElementById('upd').textContent='Обновлено: '+new Date(DATA.updated).toLocaleString('ru-RU',{timeZone:'Europe/Moscow'})+' МСК';
+const box=document.getElementById('cards');
+DATA.strategies.forEach((s,i)=>box.appendChild(card(s, i?'var(--s2)':'var(--s1)')));
+setTimeout(()=>location.reload(), 5*60*1000);
+</script>
+</body>
+</html>
